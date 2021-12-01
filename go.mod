@@ -1,4 +1,4 @@
-module tranmission-monitor
+module github.com/fabiocody/tranmission-monitor
 
 go 1.17
 

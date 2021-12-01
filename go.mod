@@ -12,7 +12,9 @@ require (
 	github.com/jinzhu/now v1.1.3 // indirect
 	github.com/mattn/go-sqlite3 v1.14.9 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
+	github.com/sirupsen/logrus v1.8.1 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
+	golang.org/x/sys v0.0.0-20211124211545-fe61309f8881 // indirect
 	gorm.io/driver/sqlite v1.2.6 // indirect
 	gorm.io/gorm v1.22.3 // indirect
 )

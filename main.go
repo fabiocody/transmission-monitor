@@ -2,28 +2,28 @@ package main
 
 import (
 	"github.com/go-co-op/gocron"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"time"
 )
 
 func main() {
-	logrus.SetReportCaller(true)
+	log.SetReportCaller(true)
 	loadEnv()
 	if environment.debug {
-		logrus.SetLevel(logrus.DebugLevel)
+		log.SetLevel(log.DebugLevel)
 	} else {
-		logrus.SetLevel(logrus.InfoLevel)
+		log.SetLevel(log.InfoLevel)
 	}
 	setupDB()
 	scheduler := gocron.NewScheduler(time.UTC)
 	_, err := scheduler.Cron("*/1 * * * *").Do(checkTorrents)
 	handleErr(err)
-	logrus.Info("Started")
+	log.Info("Started")
 	scheduler.StartBlocking()
 }
 
 func checkTorrents() {
-	logrus.Debug("Checking torrents")
+	log.Debug("Checking torrents")
 	transmission := getTransmissionClient()
 	torrents := getTorrents(transmission)
 	torrentsMap := make(map[string]*string, len(*torrents))
@@ -35,7 +35,7 @@ func checkTorrents() {
 				Name: *t.Name,
 			})
 			torrentsMap[*t.HashString] = t.Name
-			logrus.Debugf("Saving %#v", savedTorrent)
+			log.Debugf("Saving %#v", savedTorrent)
 		}
 	}
 	var dbTorrents []Torrent

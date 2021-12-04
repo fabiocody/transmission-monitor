@@ -1,21 +1,21 @@
 package main
 
 import (
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"os"
 	"strconv"
 )
 
 func handleErr(err error) {
 	if err != nil {
-		logrus.Fatal(err)
+		log.Fatal(err)
 	}
 }
 
 func getEnv(key string) string {
 	v := os.Getenv(key)
 	if v == "" {
-		logrus.Fatalf("Could not find environment variable %s\n", key)
+		log.Fatalf("Could not find environment variable %s\n", key)
 	}
 	return v
 }

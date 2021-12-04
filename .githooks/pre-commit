@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "Running go fmt"
+go fmt

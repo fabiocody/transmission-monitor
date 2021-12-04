@@ -7,11 +7,11 @@ COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
 COPY *.go ./
-RUN go build -o /transmission-monitor
+RUN go build -ldflags="-extldflags=-static" -o /transmission-monitor
 RUN mkdir /data
 
 ## Deploy
-FROM gcr.io/distroless/base
+FROM gcr.io/distroless/static
 WORKDIR /
 COPY --from=build --chown=nonroot:nonroot /transmission-monitor /transmission-monitor
 COPY --from=build --chown=nonroot:nonroot /data /data

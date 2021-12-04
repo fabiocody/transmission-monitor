@@ -7,6 +7,10 @@ import (
 )
 
 func main() {
+	log.SetFormatter(&log.TextFormatter{
+		ForceColors:   true,
+		FullTimestamp: true,
+	})
 	log.SetReportCaller(true)
 	loadEnv()
 	if environment.debug {

@@ -16,7 +16,7 @@ func main() {
 	}
 	setupDB()
 	scheduler := gocron.NewScheduler(time.UTC)
-	_, err := scheduler.Every(1).Minutes().Do(checkTorrents)
+	_, err := scheduler.Cron("*/1 * * * *").Do(checkTorrents)
 	handleErr(err)
 	logrus.Info("Started")
 	scheduler.StartBlocking()

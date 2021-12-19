@@ -10,7 +10,7 @@ type ArgsType struct {
 	Https    bool   `arg:"env" default:"false" help:"enable https when connecting to transmission"`
 	ApiToken string `arg:"required,env:API_TOKEN" help:"telegram api token"`
 	ChatId   int64  `arg:"required,env:CHAT_ID" help:"telegram chat id"`
-	Daemon   bool   `arg:"env" help:"Daemonize"`
+	Daemon   bool   `arg:"env" help:"Daemonize (the check will run every minute)"`
 }
 
 var Args ArgsType

@@ -5,21 +5,21 @@ import (
 	"github.com/hekmon/transmissionrpc/v2"
 )
 
-func getTransmissionClient() *transmissionrpc.Client {
-	host := environment.transmissionHost
-	username := environment.transmissionUsername
-	password := environment.transmissionPassword
+func GetTransmissionClient() *transmissionrpc.Client {
+	host := Args.Host
+	username := Args.Username
+	password := Args.Password
 	config := transmissionrpc.AdvancedConfig{
-		HTTPS: environment.transmissionHttps,
-		Port:  environment.transmissionPort,
+		HTTPS: Args.Https,
+		Port:  Args.Port,
 	}
 	transmission, err := transmissionrpc.New(host, username, password, &config)
-	handleErr(err)
+	HandleErr(err)
 	return transmission
 }
 
-func getTorrents(transmission *transmissionrpc.Client) *[]transmissionrpc.Torrent {
+func GetTorrents(transmission *transmissionrpc.Client) *[]transmissionrpc.Torrent {
 	torrents, err := transmission.TorrentGetAll(context.TODO())
-	handleErr(err)
+	HandleErr(err)
 	return &torrents
 }

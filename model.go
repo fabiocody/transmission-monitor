@@ -10,12 +10,12 @@ type Torrent struct {
 	Name string
 }
 
-var db *gorm.DB
+var DB *gorm.DB
 
-func setupDB() {
+func SetupDB() {
 	var err error
-	db, err = gorm.Open(sqlite.Open(environment.databaseFile))
-	handleErr(err)
-	err = db.AutoMigrate(&Torrent{})
-	handleErr(err)
+	DB, err = gorm.Open(sqlite.Open(Args.Database))
+	HandleErr(err)
+	err = DB.AutoMigrate(&Torrent{})
+	HandleErr(err)
 }

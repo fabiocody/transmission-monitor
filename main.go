@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/alexflint/go-arg"
 	"github.com/go-co-op/gocron"
 	log "github.com/sirupsen/logrus"
 	"time"
@@ -12,29 +13,33 @@ func main() {
 		FullTimestamp: true,
 	})
 	log.SetReportCaller(true)
-	loadEnv()
-	if environment.debug {
+	arg.MustParse(&Args)
+	if Args.Debug {
 		log.SetLevel(log.DebugLevel)
 	} else {
 		log.SetLevel(log.InfoLevel)
 	}
-	setupDB()
-	scheduler := gocron.NewScheduler(time.UTC)
-	_, err := scheduler.Cron("*/1 * * * *").Do(checkTorrents)
-	handleErr(err)
-	log.Info("Started")
-	scheduler.StartBlocking()
+	SetupDB()
+	if Args.Daemon {
+		scheduler := gocron.NewScheduler(time.UTC)
+		_, err := scheduler.Cron("*/1 * * * *").Do(CheckTorrents)
+		HandleErr(err)
+		log.Info("Started")
+		scheduler.StartBlocking()
+	} else {
+		CheckTorrents()
+	}
 }
 
-func checkTorrents() {
+func CheckTorrents() {
 	log.Debug("Checking torrents")
-	transmission := getTransmissionClient()
-	torrents := getTorrents(transmission)
+	transmission := GetTransmissionClient()
+	torrents := GetTorrents(transmission)
 	torrentsMap := make(map[string]*string, len(*torrents))
 	for _, t := range *torrents {
 		if *t.PercentDone < 1.0 {
 			var savedTorrent Torrent
-			db.FirstOrCreate(&savedTorrent, Torrent{
+			DB.FirstOrCreate(&savedTorrent, Torrent{
 				Hash: *t.HashString,
 				Name: *t.Name,
 			})
@@ -43,11 +48,11 @@ func checkTorrents() {
 		}
 	}
 	var dbTorrents []Torrent
-	db.Find(&dbTorrents)
+	DB.Find(&dbTorrents)
 	for _, t := range dbTorrents {
 		if _, ok := torrentsMap[t.Hash]; !ok {
-			db.Delete(&t)
-			sendNotification(&t)
+			DB.Delete(&t)
+			SendNotification(&t)
 		}
 	}
 }

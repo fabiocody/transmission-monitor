@@ -6,12 +6,12 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func sendNotification(torrent *Torrent) {
-	bot, err := tgbotapi.NewBotAPI(environment.telegramApiToken)
-	handleErr(err)
+func SendNotification(torrent *Torrent) {
+	bot, err := tgbotapi.NewBotAPI(Args.ApiToken)
+	HandleErr(err)
 	msgString := fmt.Sprintf("%s has finished downloading\n", torrent.Name)
 	log.Debugln(msgString)
-	msg := tgbotapi.NewMessage(environment.telegramChatId, msgString)
+	msg := tgbotapi.NewMessage(Args.ChatId, msgString)
 	_, err = bot.Send(msg)
-	handleErr(err)
+	HandleErr(err)
 }
